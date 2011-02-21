@@ -6,16 +6,23 @@
   action="spot_me_save.php"
   method="POST"
   ajaxify="1">
-  <input type="text" id="amount" name="amount"/>
-  <input type="Submit" value="Add Amount"/>
+  <input type="text" id="amount" name="amount"/><br/>
+
+  <label for="">Friends Involved :</label>
+  <div id="friends_involved_container" name="friends_involved_container">
+  </div>
+
+
+  <input type="text" id="friends_involved" name="friends_involved"/>
+  <input type="Submit" value="Add Event"/>
 </form>
 
 <h1>Your Debt</h1>
 
-
-<div align="center">
+<div>
   <img id="image"/>
   <div id="name"></div>
+  <a id="spot_me_add_me" rel="add-friend">Add Me To This Event</a>
 </div>
 
 

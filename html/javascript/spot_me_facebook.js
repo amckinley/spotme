@@ -1,6 +1,6 @@
 
 window.fbAsyncInit = function(){
-  FB.init({appId:'131327880269835',status:true,cookie:true,xfbml:true});
+  FB.init({appId:SPOTME.FACEBOOK_APP_KEY,status:true,cookie:true,xfbml:true});
   go();
 };
 
@@ -14,7 +14,6 @@ window.fbAsyncInit = function(){
 
 function go(){
 
-
 FB.getLoginStatus(function(response) {
     if (response.session) {
       show_logout_button();
@@ -26,9 +25,11 @@ FB.getLoginStatus(function(response) {
 FB.api('/me', function(user) {
   if(!user.error) {
     var image = document.getElementById('image');
-    image.src = 'http://graph.facebook.com/' + user.id + '/picture';
+    image.src = SPOTME.FACEBOOK_GRAPH_API_URL + user.id + '/picture';
     var name = document.getElementById('name');
     name.innerHTML = user.name;
+    SPOTME.U = user;
+    document.getElementById('spot_me_add_me').name= SPOTME.U.id;
   }
 })
   
@@ -50,13 +51,13 @@ function load_search_suggestions(){
     FB.api('search?q=' + query +'&type=user',function(response) {
       for (var i=0, l=response.data.length; i<l; i++) {
         var friend_suggestion = response.data[i];
-        var image_source = 'http://graph.facebook.com/' + friend_suggestion.id + '/picture';
-        write_suggestions('<img src="'+image_source+'"> -- ' + friend_suggestion.name);
+        var image_source = SPOTME.FACEBOOK_GRAPH_API_URL + friend_suggestion.id + '/picture';
+        write_suggestions('<img src="'+image_source+'"> -- ' + friend_suggestion.name + ' <a name="'+friend_suggestion.id+'" rel="add-friend">Add This Friend To Event</a><br />');
       }
     });
   }
 }
 
 function write_suggestions(name){
-  document.getElementById('spot_me_search_suggestions').innerHTML += name +'\n';
+  document.getElementById('spot_me_search_suggestions').innerHTML += name;
 }
