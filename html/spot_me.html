@@ -1,39 +1,76 @@
+<style>
+  ul{
+    list-style:none;
+    display:inline;
+  }
+  ul li{
+    display:inline;
+    margin:3px;
 
-<h1>Add Form</h1>
-<form 
+  }
+</style>
+<div id="spot_me_dialog" style = "display:none;">
+<h3></h3>
+  <form 
   id="the_form"
   name="the_form"
   action="spot_me_save.php"
   method="POST"
   ajaxify="1">
-  <input type="text" id="amount" name="amount"/><br/>
+    <label for="amount">Amount $</label>
+    <input type="text" id="amount" name="amount"/><br/>
 
-  <label for="">Friends Involved :</label>
-  <div id="friends_involved_container" name="friends_involved_container">
-  </div>
+    <label for="">Friends Involved :</label>
+    <div id="friends_involved_container" name="friends_involved_container">
+    </div>
 
+    <input type="hidden" id="friends_involved" name="friends_involved"/>
+    <input type="Submit" value="Add Event"/>
+  </form>
+  <label for="spot_me_search">Start typing a friend's name to get him to spot you</label>
+  <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions()"/>
+  <h5>Search Suggestions:</h5>
+  <div id="spot_me_search_suggestions" name="spot_me_search_suggestions"></div>
+</div>
 
-  <input type="text" id="friends_involved" name="friends_involved"/>
-  <input type="Submit" value="Add Event"/>
-</form>
+<div id="my_debt_dialog" style="display:none;">
+  <h5>Your Debt</h5>
+  <table>
+    <tr>
+      <td>fb_id</td>
+      <td>amount</td>
+    </tr>
+    <tbody id ="debt_table_body">
 
-<h1>Your Debt</h1>
+    </tbody>
+  </table>
+</div>
 
-<div>
+<div id="who_am_i_dialog" style="display:none;">
   <img id="image"/>
   <div id="name"></div>
   <a id="spot_me_add_me" rel="add-friend">Add Me To This Event</a>
 </div>
 
-
 <div id="fb-root">
-  <fb:login-button></fb:login-button>
-  <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions()"/>
+<ul>
+  <li>
+    <a rel="spot-me"> [ spot_me ] </a>
+  </li>
+  <li>
+    <a rel="my-debt"> [ my_debt ] </a>
+  </li>
+  <li>
+    <a rel="who-am-i">[ who_am_i ] </a>
+  </li>
+  <li>
+    <fb:login-button></fb:login-button>
+  </li>
+</ul>
 
 </div>
-  <h5>Search Suggestions:</h5>
-  <div id="spot_me_search_suggestions" name="spot_me_search_suggestions"></div>
-<div id="spot_me_login"></div>
+
+
 <script type="text/javascript" src="javascript/spot_me.js"></script>
 <script type="text/javascript" src="javascript/spot_me_form.js"></script>
 <script type="text/javascript" src="javascript/spot_me_validate.js"></script>
