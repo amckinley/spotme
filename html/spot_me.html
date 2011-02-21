@@ -1,7 +1,5 @@
-<script type="text/javascript" src="javascript/spot_me.js"></script>
-<script type="text/javascript" src="javascript/spot_me_form.js"></script>
-<script type="text/javascript" src="javascript/spot_me_validation.js"></script>
 
+<h1>Add Form</h1>
 <form 
   id="the_form"
   name="the_form"
@@ -11,3 +9,25 @@
   <input type="text" id="amount" name="amount"/>
   <input type="Submit" value="Add Amount"/>
 </form>
+
+<h1>Your Debt</h1>
+
+
+<div align="center">
+  <img id="image"/>
+  <div id="name"></div>
+</div>
+
+
+<div id="fb-root">
+  <fb:login-button></fb:login-button>
+  <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions()"/>
+
+</div>
+  <h5>Search Suggestions:</h5>
+  <div id="spot_me_search_suggestions" name="spot_me_search_suggestions"></div>
+<div id="spot_me_login"></div>
+<script type="text/javascript" src="javascript/spot_me.js"></script>
+<script type="text/javascript" src="javascript/spot_me_form.js"></script>
+<script type="text/javascript" src="javascript/spot_me_validate.js"></script>
+<script type="text/javascript" src="javascript/spot_me_facebook.js"></script>
