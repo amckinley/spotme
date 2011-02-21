@@ -1,4 +1,17 @@
-SPOT_ME.form={}
+var SPOTME_FORM
+
+
+SPOTME_FORM.form={
+  "name":"name",
+  "action":"",
+  "method":"POST"
+}
+
+function Form(form_id){
+  this.name = form_id
+  this.action = form_id
+  this.method = 'POST'
+}
 
 function create_div(div_id){
   
