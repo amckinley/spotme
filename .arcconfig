@@ -1,0 +1,5 @@
+{
+  "project_id" : "spotme",
+  "conduit_uri" : "http://phabricator.diamondtown.org/api/",
+  "copyright_holder" : "Minus 9 Software LLC"
+}
