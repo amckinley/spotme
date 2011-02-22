@@ -1,13 +1,79 @@
-<script type="text/javascript" src="javascript/spot_me.js"></script>
-<script type="text/javascript" src="javascript/spot_me_form.js"></script>
-<script type="text/javascript" src="javascript/spot_me_validation.js"></script>
+<style>
+  ul{
+    list-style:none;
+    display:inline;
+  }
+  ul li{
+    display:inline;
+    margin:3px;
 
-<form 
+  }
+</style>
+<div id="spot_me_dialog" style = "display:none;">
+<h3></h3>
+  <form 
   id="the_form"
   name="the_form"
   action="spot_me_save.php"
   method="POST"
   ajaxify="1">
-  <input type="text" id="amount" name="amount"/>
-  <input type="Submit" value="Add Amount"/>
-</form>
+    <label for="debt_amount">Amount $</label>
+    <input type="text" id="debt_amount" name="debt_amount" title="validate"/><br/>
+    <label for="debt_location">Location (Optional)</label>
+    <input type="text" id="debt_location" name="debt_location"/><br/>
+    <label for="debt_description">Description (Optional)</label>
+    <input type="text" id="debt_description" name="debt_description"/><br/>
+    <label for="debt_date">Date (Optional)</label>
+    <input type="text" id="debt_date" name="debt_date"/><br/>
+
+    <label for="">Friends Involved :</label>
+    <div id="friends_involved_container" name="friends_involved_container">
+    </div>
+
+    <input type="hidden" id="debt_friends_involved" name="debt_friends_involved"/>
+    <input type="Submit" value="Spot Me"/>
+  </form>
+  <div id="error_log"></div>
+  <label for="spot_me_search">Start typing a friend's name to get him to spot you</label>
+  <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions()"/>
+  <h5>Search Suggestions:</h5>
+  <div id="spot_me_search_suggestions" name="spot_me_search_suggestions"></div>
+</div>
+
+<div id="my_debt_dialog" style="display:none;">
+  <h5>Debt Chart</h5>
+  <table>
+    <tr>
+      <td>debt_id</td>
+      <td>name</td>
+      <td>location</td>
+      <td>time</td>
+      <td>amount</td>
+    </tr>
+    <tbody id ="debt_table_body">
+
+    </tbody>
+  </table>
+</div>
+
+<div id="fb-root">
+<ul>
+  <li>
+    <a rel="spot-me"> [ spot_me ] </a>
+  </li>
+  <li>
+    <a rel="my-debt"> [ my_debt ] </a>
+  </li>
+  <li>
+    <fb:login-button></fb:login-button>
+  </li>
+</ul>
+
+</div>
+
+
+<script type="text/javascript" src="javascript/spot_me.js"></script>
+<script type="text/javascript" src="javascript/spot_me_common.js"></script>
+<script type="text/javascript" src="javascript/spot_me_form.js"></script>
+<script type="text/javascript" src="javascript/spot_me_validate.js"></script>
+<script type="text/javascript" src="javascript/spot_me_facebook.js"></script>

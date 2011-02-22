@@ -1,5 +1,4 @@
-var SPOTME_FORM
-
+var SPOTME_FORM = {};
 
 SPOTME_FORM.form={
   "name":"name",
