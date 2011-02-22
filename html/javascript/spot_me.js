@@ -11,10 +11,6 @@ var nearest = function(elm, tag) {
           return elm;
     };
 
-function init(){
-  
-}
-window.onload=init;
 document.onclick = function(e){
   e = e || window.event;
   lct = e.target || e.srcElement;
@@ -41,11 +37,12 @@ document.onclick = function(e){
     case 'spot-me':
       spot_me();
       break;
+    case 'log-out':
+      spot_me_log_out();
+      break;
     default:
       return;
-
   }
-
 }
 
 SPOTME.event_friends = [];
@@ -108,35 +105,30 @@ function remove_friend_from_event(fb_id){
 }
 
 document.onsubmit = function (e){
-
-  validate(e);
+  //validate(e);
 
   e = e || window.event;
   var elem = e.target || e.srcElement;
-  if(!elem || elem.nodeName != 'FORM' || !elem.getAttribute('ajaxify')){
-    return false;
-  }
 
-  save_debt_async(e);
+  if(!elem || elem.nodeName != 'FORM' || elem.getAttribute('ajaxify')){
+    save_debt_async();
+    return false;
+  } 
 
 }
 
-function save_debt_async(e){
-  var async_request = new XmlHttpRequest();
+function save_debt_async(){
+  var async_request = new XMLHttpRequest();
   async_request.open("POST","spot_me_save.php");
-  async_request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-  async_request.send("amount=10");
+  async_request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  var amount_val = document.getElementById('amount').value;
+  var friends_val = document.getElementById('friends_involved').value;
+  async_request.send("amount=" + amount_val+"&friends_involved=" + friends_val);
 }
 
 function spot_me(){
   var spot_me_dialog = document.getElementById('spot_me_dialog');
-  var display = spot_me_dialog.style.display;
-  if (display == 'inline') {
-    spot_me_dialog.style.display = 'none';
-  } else {
-    spot_me_dialog.style.display = 'inline';
-  }
-
+  toggle(spot_me_dialog);
 }
 
 function who_am_i(){
@@ -154,4 +146,32 @@ function toggle(togglee){
   } else {
     togglee.style.display = 'inline';
   }
+}
+
+function spot_me_log_out(){
+  if(FB){
+    FB.ui(
+       {
+           method:'auth.logout',
+           display:'hidden'
+          },
+       function() {
+           alert("you're logged out!");
+          }
+    );
+    //FB.logout(function(response) {
+    //  console.log(response);
+    //  getLoginStatus();
+    //});
+  }
+}
+function getLoginStatus(){
+
+    FB.getLoginStatus(function(response) {
+        if (response.session) {
+          alert("User Logged In");
+        } else {
+          alert("User Not Logged IN");
+        }
+    });
 }

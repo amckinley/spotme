@@ -18,14 +18,20 @@
   method="POST"
   ajaxify="1">
     <label for="amount">Amount $</label>
-    <input type="text" id="amount" name="amount"/><br/>
+    <input type="text" id="debt_amount" name="debt_amount"/><br/>
+    <label for="location">Location (Optional)</label>
+    <input type="text" id="debt_location" name="debt_location"/><br/>
+    <label for="debt_description">Description (Optional)</label>
+    <input type="text" id="debt_description" name="debt_description"/><br/>
+    <label for="debt_date">Date (Optional)</label>
+    <input type="text" id="debt_date" name="debt_date"/><br/>
 
     <label for="">Friends Involved :</label>
     <div id="friends_involved_container" name="friends_involved_container">
     </div>
 
     <input type="hidden" id="friends_involved" name="friends_involved"/>
-    <input type="Submit" value="Add Event"/>
+    <input type="Submit" value="Spot Me"/>
   </form>
   <label for="spot_me_search">Start typing a friend's name to get him to spot you</label>
   <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions()"/>
@@ -34,11 +40,16 @@
 </div>
 
 <div id="my_debt_dialog" style="display:none;">
-  <h5>Your Debt</h5>
+  <h5>Debt Chart</h5>
   <table>
     <tr>
-      <td>fb_id</td>
+      <td>debt_id</td>
+      <td>name</td>
+      <td>location</td>
+      <td>time</td>
       <td>amount</td>
+    </tr>
+    <tbody id ="debt_table_body">
     </tr>
     <tbody id ="debt_table_body">
 
@@ -49,7 +60,6 @@
 <div id="who_am_i_dialog" style="display:none;">
   <img id="image"/>
   <div id="name"></div>
-  <a id="spot_me_add_me" rel="add-friend">Add Me To This Event</a>
 </div>
 
 <div id="fb-root">
@@ -72,6 +82,7 @@
 
 
 <script type="text/javascript" src="javascript/spot_me.js"></script>
+<script type="text/javascript" src="javascript/spot_me_common.js"></script>
 <script type="text/javascript" src="javascript/spot_me_form.js"></script>
 <script type="text/javascript" src="javascript/spot_me_validate.js"></script>
 <script type="text/javascript" src="javascript/spot_me_facebook.js"></script>
