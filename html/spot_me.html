@@ -17,9 +17,9 @@
   action="spot_me_save.php"
   method="POST"
   ajaxify="1">
-    <label for="amount">Amount $</label>
-    <input type="text" id="debt_amount" name="debt_amount"/><br/>
-    <label for="location">Location (Optional)</label>
+    <label for="debt_amount">Amount $</label>
+    <input type="text" id="debt_amount" name="debt_amount" title="validate"/><br/>
+    <label for="debt_location">Location (Optional)</label>
     <input type="text" id="debt_location" name="debt_location"/><br/>
     <label for="debt_description">Description (Optional)</label>
     <input type="text" id="debt_description" name="debt_description"/><br/>
@@ -30,9 +30,10 @@
     <div id="friends_involved_container" name="friends_involved_container">
     </div>
 
-    <input type="hidden" id="friends_involved" name="friends_involved"/>
+    <input type="hidden" id="debt_friends_involved" name="debt_friends_involved"/>
     <input type="Submit" value="Spot Me"/>
   </form>
+  <div id="error_log"></div>
   <label for="spot_me_search">Start typing a friend's name to get him to spot you</label>
   <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions()"/>
   <h5>Search Suggestions:</h5>
@@ -50,16 +51,9 @@
       <td>amount</td>
     </tr>
     <tbody id ="debt_table_body">
-    </tr>
-    <tbody id ="debt_table_body">
 
     </tbody>
   </table>
-</div>
-
-<div id="who_am_i_dialog" style="display:none;">
-  <img id="image"/>
-  <div id="name"></div>
 </div>
 
 <div id="fb-root">
@@ -69,9 +63,6 @@
   </li>
   <li>
     <a rel="my-debt"> [ my_debt ] </a>
-  </li>
-  <li>
-    <a rel="who-am-i">[ who_am_i ] </a>
   </li>
   <li>
     <fb:login-button></fb:login-button>

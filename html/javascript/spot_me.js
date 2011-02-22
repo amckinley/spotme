@@ -69,7 +69,7 @@ function add_friend_to_event(fb_id){
 
 function update_friends_in_event(){
   eraseFriends();
-  document.getElementById('friends_involved').value = SPOTME.event_friends.toString();
+  document.getElementById('debt_friends_involved').value = SPOTME.event_friends.toString();
   var friends = SPOTME.event_friends;
   for (var i = 0; i < friends.length;i++){
     drawFriend(friends[i]); 
@@ -105,13 +105,14 @@ function remove_friend_from_event(fb_id){
 }
 
 document.onsubmit = function (e){
-  //validate(e);
 
   e = e || window.event;
   var elem = e.target || e.srcElement;
 
   if(!elem || elem.nodeName != 'FORM' || elem.getAttribute('ajaxify')){
-    save_debt_async();
+    if (validate(elem)){
+      save_debt_async();
+    }
     return false;
   } 
 
@@ -121,19 +122,18 @@ function save_debt_async(){
   var async_request = new XMLHttpRequest();
   async_request.open("POST","spot_me_save.php");
   async_request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  var amount_val = document.getElementById('amount').value;
-  var friends_val = document.getElementById('friends_involved').value;
-  async_request.send("amount=" + amount_val+"&friends_involved=" + friends_val);
+  var debt_to_save = {};
+  debt_to_save.amount = document.getElementById('debt_amount').value;
+  debt_to_save.friends_involved = document.getElementById('debt_friends_involved').value;
+  debt_to_save.description = document.getElementById('debt_description').value;
+  debt_to_save.location = document.getElementById('debt_location').value;
+  debt_to_save.date = document.getElementById('debt_date').value;
+  async_request.send('data=' + JSON.stringify(debt_to_save));
 }
 
 function spot_me(){
   var spot_me_dialog = document.getElementById('spot_me_dialog');
   toggle(spot_me_dialog);
-}
-
-function who_am_i(){
-  var who_am_i_dialog = document.getElementById('who_am_i_dialog');
-  toggle(who_am_i_dialog);
 }
 
 function my_debt(){

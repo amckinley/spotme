@@ -1,13 +1,10 @@
 <?php
-if (!empty($_POST['amount'])){
-  $amount = $_POST['amount'];
-  $friends_involved = $_POST['friends_involved'];
+print_r($_POST);
+if (!empty($_POST['data'])){
   $file_handle = fopen('/tmp/debt.test.db','a');
   $a = array();
-  $a['amount'] = $amount;
-  $a['friends_involved'] = $friends_involved;
-
-  $debt = json_encode($a);
+  $a['data'] = $_POST['data'];;
+  $debt = json_encode($a['data']);
   fwrite($file_handle, sprintf("%s\n",$debt));
   fclose($file_handle);
 } else {

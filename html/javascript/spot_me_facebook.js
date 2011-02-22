@@ -24,12 +24,7 @@ FB.getLoginStatus(function(response) {
 
 FB.api('/me', function(user) {
   if(!user.error) {
-    var image = document.getElementById('image');
-    image.src = SPOTME.FACEBOOK_GRAPH_API_URL + user.id + '/picture';
-    var name = document.getElementById('name');
-    name.innerHTML = user.name;
     SPOTME.U = user;
-    document.getElementById('spot_me_add_me').name= SPOTME.U.id;
   }
 })
   
