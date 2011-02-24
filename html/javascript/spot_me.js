@@ -2,19 +2,117 @@ var SPOTME = {};
 SPOTME.FACEBOOK_APP_KEY = '131327880269835';
 SPOTME.FACEBOOK_GRAPH_API_URL = 'http://graph.facebook.com/';
 SPOTME.U = {};
+SPOTME.event_friends = [];
 SPOTME.TRUST_IMAGES = [
   'images/red-status-button-12x12.png',
   'images/yellow-status-button-12x12.png',
   'images/green-status-button-12x12.png'
 ];
 
+function eraseFriends(){
+  document.getElementById('friends_involved_container').innerHTML = "";
+}
+
+function drawFriend(friend_to_draw){
+  involved_friend_html = get_profile_image_tag(friend_to_draw) + '<a name="'+friend_to_draw+'" rel="remove-friend-from-event">Remove From Event</a><br />';
+  document.getElementById('friends_involved_container').innerHTML += involved_friend_html;
+}
+
+function update_friends_in_event(){
+  eraseFriends();
+  document.getElementById('debt_friends_involved').value = '[' + SPOTME.event_friends.toString() + ']';
+  var friends = SPOTME.event_friends;
+  for (var i = 0; i < friends.length;i++){
+    drawFriend(friends[i]); 
+  }
+}
+
+function remove_friend_from_event(fb_id){
+  var friends = SPOTME.event_friends;
+  for (var i in friends){
+    if(friends.hasOwnProperty(i) && friends[i] == fb_id){
+      if (friends.length ==1){
+        SPOTME.event_friends = [];
+      } else {
+        SPOTME.event_friends.splice(i,1);
+      }
+    }
+  }
+  update_friends_in_event();
+}
+
+function get_spot_me_trust_button_html(){
+  var trust_button_html = '';
+  trust_button_html += '<img style="padding:25px;" src="';
+  trust_button_html += SPOTME.TRUST_IMAGES[Math.floor(Math.random()*3)];
+  trust_button_html += '">';
+  return trust_button_html;
+}
+
+function get_debt_async_callback(response_text){
+  var debts = JSON.parse(response_text);
+  var my_debts_html = "";
+  for (var i in (debts)){
+    if (debts.hasOwnProperty(i)){
+      my_debts_html += "<tr>";
+      my_debts_html += "<td>";
+      my_debts_html += get_profile_image_tag(debts[i].uuid2);
+      my_debts_html += get_spot_me_trust_button_html();
+      my_debts_html += "</td>";
+      my_debts_html += "<td>";
+      my_debts_html += debts[i].amount;
+      my_debts_html += "</td>";
+      my_debts_html += "</tr>";
+    }
+  }
+  document.getElementById('debt_table_body').innerHTML = my_debts_html;
+}
+
+function save_debt_async(){
+  var async_request = new XMLHttpRequest();
+  async_request.open("POST","spot_me_save.php");
+  async_request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  var debt_to_save = {};
+  debt_to_save.amount = document.getElementById('debt_amount').value;
+  debt_to_save.friends_involved = document.getElementById('debt_friends_involved').value;
+  debt_to_save.description = document.getElementById('debt_description').value;
+  debt_to_save.location = document.getElementById('debt_location').value;
+  debt_to_save.date = document.getElementById('debt_date').value;
+  async_request.send('data=' + JSON.stringify(debt_to_save));
+}
+
+function spot_me(){
+  var spot_me_dialog = document.getElementById('spot_me_dialog');
+  toggle(spot_me_dialog);
+}
+
+function my_debt(){
+  toggle(document.getElementById('my_debt_dialog'));
+  http_get('debts.php',get_debt_async_callback);
+}
+
+function spot_me_log_out(){
+  facebook_log_out();
+}
+
+function add_friend_to_event(fb_id){
+  if (!exist_in_array(fb_id, SPOTME.event_friends)){
+    clear_suggestions();
+    SPOTME.event_friends.push(fb_id);
+    update_friends_in_event(SPOTME.event_friends);
+  }
+}
+
+function add_friend(fb_id){
+  add_friend_to_event(fb_id);
+}
 
 var nearest = function(elm, tag) {
           while (elm && elm.nodeName != tag) {
                       elm = elm.parentNode;
                     }
           return elm;
-    };
+};
 
 document.onclick = function(e){
   e = e || window.event;
@@ -48,51 +146,8 @@ document.onclick = function(e){
     default:
       return;
   }
-}
+};
 
-SPOTME.event_friends = [];
-function add_friend(fb_id){
-  add_friend_to_event(fb_id);
-}
-
-function add_friend_to_event(fb_id){
-  if (!exist_in_array(fb_id, SPOTME.event_friends)){
-    SPOTME.event_friends.push(fb_id);
-    update_friends_in_event(SPOTME.event_friends);
-  }
-}
-
-function update_friends_in_event(){
-  eraseFriends();
-  document.getElementById('debt_friends_involved').value = SPOTME.event_friends.toString();
-  var friends = SPOTME.event_friends;
-  for (var i = 0; i < friends.length;i++){
-    drawFriend(friends[i]); 
-  }
-}
-
-function eraseFriends(){
-  document.getElementById('friends_involved_container').innerHTML = "";
-}
-
-function drawFriend(friend_to_draw){
-  involved_friend_html = get_profile_image_tag(friend_to_draw) + '<a name="'+friend_to_draw+'" rel="remove-friend-from-event">Remove From Event</a><br />';
-  document.getElementById('friends_involved_container').innerHTML += involved_friend_html;
-}
-
-function remove_friend_from_event(fb_id){
-  var friends = SPOTME.event_friends;
-  for (i in friends){
-    if(friends[i] == fb_id){
-      if (friends.length ==1){
-        SPOTME.event_friends = [];
-      } else {
-        SPOTME.event_friends.splice(i,1);
-      }
-    }
-  }
-  update_friends_in_event();
-}
 
 document.onsubmit = function (e){
 
@@ -105,94 +160,14 @@ document.onsubmit = function (e){
     }
     return false;
   } 
-}
-
-function save_debt_async(){
-  var async_request = new XMLHttpRequest();
-  async_request.open("POST","spot_me_save.php");
-  async_request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  var debt_to_save = {};
-  debt_to_save.amount = document.getElementById('debt_amount').value;
-  debt_to_save.friends_involved = document.getElementById('debt_friends_involved').value;
-  debt_to_save.description = document.getElementById('debt_description').value;
-  debt_to_save.location = document.getElementById('debt_location').value;
-  debt_to_save.date = document.getElementById('debt_date').value;
-  async_request.send('data=' + JSON.stringify(debt_to_save));
-}
-
-function spot_me(){
-  var spot_me_dialog = document.getElementById('spot_me_dialog');
-  toggle(spot_me_dialog);
-}
-
-function my_debt(){
-  toggle(document.getElementById('my_debt_dialog'));
-  http_get('debts.php',get_debt_async_callback);
-}
-
-function get_debt_async_callback(response_text){
-  var debts = JSON.parse(response_text);
-  var my_debts_html = "";
-  for (i in (debts)){
-    my_debts_html += "<tr>";
-    my_debts_html += "<td>";
-    my_debts_html += get_profile_image_tag(debts[i].uuid2);
-    my_debts_html += get_spot_me_trust_button_html();
-    my_debts_html += "</td>";
-    my_debts_html += "<td>";
-    my_debts_html += debts[i].amount;
-    my_debts_html += "</td>";
-    my_debts_html += "</tr>";
-  }
-  document.getElementById('debt_table_body').innerHTML = my_debts_html;
-}
+};
 
 function get_spot_me_trust_button(){
   var trust_button = document.createElement('img');
-  trust_button.setAttribute('src', SPOTME.TRUST_IMAGES[Math.floor(Math.random()*2)]);
+  trust_button.setAttribute('src', SPOTME.TRUST_IMAGES[Math.floor(Math.random()*3)]);
   return trust_button;
 }
 
-function get_spot_me_trust_button_html(){
-  var trust_button_html = '';
-  trust_button_html += '<img style="padding:25px;" src="';
-  trust_button_html += SPOTME.TRUST_IMAGES[Math.floor(Math.random()*2)];
-  trust_button_html += '">';
-  return trust_button_html;
-}
-
-function toggle(togglee){
-  if (togglee.style.display == 'inline'){
-    togglee.style.display = 'none';
-  } else {
-    togglee.style.display = 'inline';
-  }
-}
-
-function spot_me_log_out(){
-  if(FB){
-    FB.ui(
-       {
-           method:'auth.logout',
-           display:'hidden'
-          },
-       function() {
-           alert("you're logged out!");
-          }
-    );
-    //FB.logout(function(response) {
-    //  console.log(response);
-    //  getLoginStatus();
-    //});
-  }
-}
-function getLoginStatus(){
-
-    FB.getLoginStatus(function(response) {
-        if (response.session) {
-          alert("User Logged In");
-        } else {
-          alert("User Not Logged IN");
-        }
-    });
+function draw_page(){
+  toggle(document.getElementById('spot-me-menu'));
 }
