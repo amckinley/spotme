@@ -14,8 +14,17 @@ function eraseFriends(){
 }
 
 function drawFriend(friend_to_draw){
-  involved_friend_html = get_profile_image_tag(friend_to_draw) + '<a name="'+friend_to_draw+'" rel="remove-friend-from-event">Remove From Event</a><br />';
-  document.getElementById('friends_involved_container').innerHTML += involved_friend_html;
+  var remove_friend_link = document.createElement('a');
+  remove_friend_link.setAttribute('name',friend_to_draw);
+  remove_friend_link.setAttribute('rel',"remove-friend-from-event");
+  remove_friend_link.innerHTML = 'Remove From Event';
+  var divy_hook_div = document.createElement('span');
+  divy_hook_div.setAttribute('id','divy_' + friend_to_draw );
+  document.getElementById('friends_involved_container').appendChild(get_profile_image_element(friend_to_draw));
+  document.getElementById('friends_involved_container').appendChild(get_spot_me_trust_button());
+  document.getElementById('friends_involved_container').appendChild(divy_hook_div);
+  document.getElementById('friends_involved_container').appendChild(remove_friend_link);
+  document.getElementById('friends_involved_container').appendChild(document.createElement('br'));
 }
 
 function update_friends_in_event(){
@@ -25,6 +34,7 @@ function update_friends_in_event(){
   for (var i = 0; i < friends.length;i++){
     drawFriend(friends[i]); 
   }
+  calculateAmount();
 }
 
 function remove_friend_from_event(fb_id){
@@ -148,7 +158,6 @@ document.onclick = function(e){
   }
 };
 
-
 document.onsubmit = function (e){
 
   e = e || window.event;
@@ -162,12 +171,22 @@ document.onsubmit = function (e){
   } 
 };
 
-function get_spot_me_trust_button(){
-  var trust_button = document.createElement('img');
-  trust_button.setAttribute('src', SPOTME.TRUST_IMAGES[Math.floor(Math.random()*3)]);
-  return trust_button;
-}
-
 function draw_page(){
   toggle(document.getElementById('spot-me-menu'));
+}
+
+function calculateAmount(){
+  var amount_value_element = document.getElementById('debt_amount');
+  var amount_value = parseFloat(amount_value_element.value);
+  if (!isNaN(amount_value)){
+    var debt_friends_involved_element = document.getElementById('debt_friends_involved');
+    var friends_involved = JSON.parse(debt_friends_involved_element.value);
+    if (debt_friends_involved_element.value.length > 0){
+      var divy_split = amount_value / (friends_involved.length  + 1 );
+      for (var i=0;i < friends_involved.length;i++){
+        var divy_id = "divy_" + friends_involved[i].toString();
+        document.getElementById(divy_id).innerHTML = ' $' + divy_split.toFixed(2) + ' ';
+      }
+    }
+  }
 }

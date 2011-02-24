@@ -18,7 +18,7 @@
   method="POST"
   ajaxify="1">
     <label for="debt_amount">Amount $</label>
-    <input type="text" id="debt_amount" name="debt_amount" title="validate"/><br/>
+    <input type="text" id="debt_amount" name="debt_amount" title="validate" onkeyup="calculateAmount();"/><br/>
     <label for="debt_location">Location (Optional)</label>
     <input type="text" id="debt_location" name="debt_location"/><br/>
     <label for="debt_description">Description (Optional)</label>
@@ -35,7 +35,7 @@
   </form>
   <div id="error_log"></div>
   <label for="spot_me_search">Start typing a friend's name to get him to spot you</label>
-  <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions()"/>
+  <input id="spot_me_search" name="spot_me_search" type="text" onKeyUp="load_search_suggestions();"/>
   <h5>Search Suggestions:</h5>
   <div id="spot_me_search_suggestions" name="spot_me_search_suggestions"></div>
 </div>
@@ -67,6 +67,5 @@
 
 <script type="text/javascript" src="javascript/spot_me.js"></script>
 <script type="text/javascript" src="javascript/spot_me_common.js"></script>
-<script type="text/javascript" src="javascript/spot_me_form.js"></script>
 <script type="text/javascript" src="javascript/spot_me_validate.js"></script>
 <script type="text/javascript" src="javascript/spot_me_facebook.js"></script>
