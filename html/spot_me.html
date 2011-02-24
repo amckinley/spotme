@@ -30,7 +30,7 @@
     <div id="friends_involved_container" name="friends_involved_container">
     </div>
 
-    <input type="hidden" id="debt_friends_involved" name="debt_friends_involved"/>
+    <input type="hidden" id="debt_friends_involved" name="debt_friends_involved" title="validate-friends-involved"/>
     <input type="Submit" value="Spot Me"/>
   </form>
   <div id="error_log"></div>
@@ -53,20 +53,17 @@
   </table>
 </div>
 <div id="fb-root">
-<ul>
+  <ul id="spot-me-menu" style="display:none;">
   <li>
     <a rel="spot-me"> [ spot_me ] </a>
   </li>
   <li>
     <a rel="my-debt"> [ my_debt ] </a>
   </li>
-  <li>
-    <fb:login-button></fb:login-button>
-  </li>
 </ul>
-
+  <div id="login_button" style="display:none;"><fb:login-button></fb:login-button></div>
+  <div id="logout_button" style="display:none;"><a rel="log-out">[ Log Out ]</a></div>
 </div>
-
 
 <script type="text/javascript" src="javascript/spot_me.js"></script>
 <script type="text/javascript" src="javascript/spot_me_common.js"></script>
